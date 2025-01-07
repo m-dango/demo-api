@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  title: Users
+  version: '0.1'
+servers:
+  - url: https://demo-api/v0
+tags:
+  - name: user
+    description: User operations
+security: []
+
+paths:
+  /users:
+    post:
+      summary: Create a user
+      tags:
+        - user
+      operationId: postUser
+      responses:
+        '201':
+          $ref: '#/components/responses/User'
+        '400':
+          $ref: '#/components/responses/Problem'
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 123
+          readOnly: true
+        email:
+          type: string
+          example: me@example.com
+          writeOnly: true
+        name: 
+          type: string
+          example: Alice
+
+    Problem:
+      type: object
+      properties:
+        type: 
+          type: string
+          example: https://example.com/problem/error
+        title:
+          type: string
+          example: Bad Request
+        detail:
+          type: string
+          example: There was a problem with the request.
+
+  responses:
+    Problem:
+      description: Problem JSON
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+
+    User:
+      description: User
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+
+  requestBodies:
+    User:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'

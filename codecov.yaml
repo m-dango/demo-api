@@ -1,2 +1,6 @@
+coverage:
+  status:
+    project: true
+
 ignore:
   - '**/*.gen.go'

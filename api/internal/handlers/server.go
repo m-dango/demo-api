@@ -2,7 +2,11 @@
 //go:generate go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen --config=types.config.yaml ../../openapi.yaml
 package handlers
 
-var _ StrictServerInterface = (*Server)(nil)
+import (
+	"github.com/m-dango/demo-api/internal/generated"
+)
+
+var _ generated.StrictServerInterface = (*Server)(nil)
 
 type Server struct{}
 

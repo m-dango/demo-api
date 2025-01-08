@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/m-dango/demo-api/internal/generated"
 	"github.com/m-dango/demo-api/internal/handlers"
 	"github.com/stretchr/testify/assert"
 )
@@ -19,11 +20,11 @@ func TestPostUserSuccess(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		reqBody := handlers.User{
+		reqBody := generated.User{
 			Name:  &c.name,
 			Email: &c.email,
 		}
-		req := handlers.PostUserRequestObject{Body: &reqBody}
+		req := generated.PostUserRequestObject{Body: &reqBody}
 
 		server := handlers.NewServer()
 		got, err := server.PostUser(context.Background(), req)
@@ -31,10 +32,12 @@ func TestPostUserSuccess(t *testing.T) {
 		assert.Nil(err)
 		if assert.NotNil(got) {
 			id := "1"
-			want := handlers.PostUser201JSONResponse{handlers.UserJSONResponse{
-				Id:   &id,
-				Name: &c.name,
-			}}
+			want := generated.PostUser201JSONResponse{
+				UserJSONResponse: generated.UserJSONResponse{
+					Id:   &id,
+					Name: &c.name,
+				},
+			}
 
 			assert.Equal(want, got, c.name)
 		}
@@ -48,31 +51,31 @@ func TestPostUserBadFields(t *testing.T) {
 	email := "charlie@example.com"
 	emptyString := ""
 	cases := map[string]struct {
-		reqBody handlers.User
+		reqBody generated.User
 	}{
 		"Missing email": {
-			handlers.User{Name: &name},
+			generated.User{Name: &name},
 		},
 		"Empty email": {
-			handlers.User{Name: &name, Email: &emptyString},
+			generated.User{Name: &name, Email: &emptyString},
 		},
 		"Missing name": {
-			handlers.User{Email: &email},
+			generated.User{Email: &email},
 		},
 		"Empty name": {
-			handlers.User{Email: &email, Name: &emptyString},
+			generated.User{Email: &email, Name: &emptyString},
 		},
 	}
 
 	resType := "example"
 	resTitle := "Bad Request"
 	resDetail := "There was a problem with the request."
-	want := handlers.PostUser400ApplicationProblemPlusJSONResponse{
-		handlers.ProblemApplicationProblemPlusJSONResponse{Type: &resType, Title: &resTitle, Detail: &resDetail},
+	want := generated.PostUser400ApplicationProblemPlusJSONResponse{
+		ProblemApplicationProblemPlusJSONResponse: generated.ProblemApplicationProblemPlusJSONResponse{Type: &resType, Title: &resTitle, Detail: &resDetail},
 	}
 
 	for name, c := range cases {
-		req := handlers.PostUserRequestObject{Body: &c.reqBody}
+		req := generated.PostUserRequestObject{Body: &c.reqBody}
 
 		server := handlers.NewServer()
 		got, err := server.PostUser(context.Background(), req)

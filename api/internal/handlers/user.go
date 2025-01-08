@@ -1,14 +1,18 @@
 package handlers
 
-import "context"
+import (
+	"context"
 
-func (*Server) PostUser(ctx context.Context, request PostUserRequestObject) (PostUserResponseObject, error) {
+	"github.com/m-dango/demo-api/internal/generated"
+)
+
+func (*Server) PostUser(ctx context.Context, request generated.PostUserRequestObject) (generated.PostUserResponseObject, error) {
 	if request.Body.Email == nil || *request.Body.Email == "" || request.Body.Name == nil || *request.Body.Name == "" {
 		resType := "example"
 		resTitle := "Bad Request"
 		resDetail := "There was a problem with the request."
-		return PostUser400ApplicationProblemPlusJSONResponse{
-			ProblemApplicationProblemPlusJSONResponse{
+		return generated.PostUser400ApplicationProblemPlusJSONResponse{
+			ProblemApplicationProblemPlusJSONResponse: generated.ProblemApplicationProblemPlusJSONResponse{
 				Type:   &resType,
 				Title:  &resTitle,
 				Detail: &resDetail,
@@ -17,8 +21,8 @@ func (*Server) PostUser(ctx context.Context, request PostUserRequestObject) (Pos
 	}
 
 	userId := "1"
-	return PostUser201JSONResponse{
-		UserJSONResponse{
+	return generated.PostUser201JSONResponse{
+		UserJSONResponse: generated.UserJSONResponse{
 			Id:   &userId,
 			Name: request.Body.Name,
 		},

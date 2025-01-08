@@ -6,6 +6,6 @@ var _ StrictServerInterface = (*Server)(nil)
 
 type Server struct{}
 
-func NewServer() Server {
-	return Server{}
+func NewServer() *Server {
+	return &Server{}
 }

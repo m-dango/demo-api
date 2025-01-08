@@ -5,13 +5,14 @@ import (
 	"net/http"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/m-dango/demo-api/internal/generated"
 	"github.com/m-dango/demo-api/internal/handlers"
 	middleware "github.com/oapi-codegen/nethttp-middleware"
 )
 
 func main() {
 	server := handlers.NewServer()
-	swagger, err := handlers.GetSwagger()
+	swagger, err := generated.GetSwagger()
 	if err != nil {
 		log.Fatalln("spec error:", err)
 	}
@@ -21,9 +22,9 @@ func main() {
 	options := middleware.Options{SilenceServersWarning: true}
 	mw := middleware.OapiRequestValidatorWithOptions(swagger, &options)
 	// Server Interface for the handler
-	si := handlers.NewStrictHandler(server, nil)
+	si := generated.NewStrictHandler(server, nil)
 	// Handler for http.Server
-	h := handlers.HandlerFromMuxWithBaseURL(si, nil, "/v0")
+	h := generated.HandlerFromMuxWithBaseURL(si, nil, "/v0")
 	// Wrap handler in validation middleware
 	h = mw(h)
 

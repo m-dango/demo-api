@@ -1,13 +1,13 @@
-package main_test
+package handlers_test
 
 import (
 	"testing"
 
-	main "github.com/m-dango/demo-api"
+	"github.com/m-dango/demo-api/internal/handlers"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCreateHandler(t *testing.T) {
-	h := main.CreateHandler()
+	h := handlers.CreateHandler()
 	assert.NotNil(t, h)
 }

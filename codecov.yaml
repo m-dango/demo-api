@@ -3,4 +3,5 @@ coverage:
     project: true
 
 ignore:
+  - 'main.go'
   - '**/*.gen.go'

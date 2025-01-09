@@ -9,13 +9,14 @@ import (
 	middleware "github.com/oapi-codegen/nethttp-middleware"
 )
 
-func main() {
+func CreateHandler() http.Handler {
+	baseUrl := "/v0"
 	server := handlers.NewServer()
 	swagger, err := handlers.GetSwagger()
 	if err != nil {
 		log.Fatalln("spec error:", err)
 	}
-	swagger.Servers = openapi3.Servers{&openapi3.Server{URL: "/v0"}}
+	swagger.Servers = openapi3.Servers{&openapi3.Server{URL: baseUrl}}
 
 	// middleware for validating requests with spec
 	options := middleware.Options{SilenceServersWarning: true}
@@ -23,13 +24,15 @@ func main() {
 	// Server Interface for the handler
 	si := handlers.NewStrictHandler(server, nil)
 	// Handler for http.Server
-	h := handlers.HandlerFromMuxWithBaseURL(si, nil, "/v0")
+	h := handlers.HandlerFromMuxWithBaseURL(si, nil, baseUrl)
 	// Wrap handler in validation middleware
-	h = mw(h)
+	return mw(h)
+}
 
+func main() {
 	s := &http.Server{
-		Handler: h,
-		Addr:    "0.0.0.0:8080",
+		Handler: CreateHandler(),
+		Addr:    ":8080",
 	}
 
 	log.Fatal(s.ListenAndServe())

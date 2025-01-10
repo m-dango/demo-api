@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  Caddyfile: "demo-api.dango.space, localhost {\n\trespond / \"Hello, World!\"\n\trespond
+    /health-check 204\n\treverse_proxy localhost:8080\n}\n"
+kind: ConfigMap
+metadata:
+  name: caddyfile-config

@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-api-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo-api
+  template:
+    metadata:
+      labels:
+        app: demo-api
+    spec:
+      containers:
+      - name: demo-api
+        image: ghcr.io/m-dango/demo-api:main
+        ports:
+          - containerPort: 8080
+
+      - name: caddy
+        image: caddy:2.9-alpine
+        ports:
+          - containerPort: 80
+          - containerPort: 443
+        volumeMounts:
+          - name: caddyfile-volume
+            mountPath: /etc/caddy/Caddyfile
+            subPath: Caddyfile
+
+          - name: caddy-data
+            mountPath: /data
+
+      volumes:
+        - name: caddyfile-volume
+          configMap:
+            name: caddyfile-config
+
+        - name: caddy-data
+          persistentVolumeClaim:
+            claimName: caddy-pvc

@@ -1,0 +1,5 @@
+demo-api.dango.space, localhost {
+	respond / "Hello, World!"
+	respond /health-check 204
+	reverse_proxy localhost:8080
+}

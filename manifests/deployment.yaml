@@ -19,7 +19,7 @@ spec:
           - containerPort: 8080
 
       - name: caddy
-        image: caddy:2.9-alpine
+        image: caddy:2.10-alpine
         ports:
           - containerPort: 80
           - containerPort: 443
